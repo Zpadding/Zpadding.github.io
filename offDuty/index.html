@@ -131,6 +131,7 @@
   let endTime = (Number(offDutyTime.split(":")[0]*60) + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
   let temp = endTime - begTime;
   let timer = setInterval(function() {
+    if (temp < 0) clearInterval(timer);
     let tempH = Math.floor(temp / 3600);
     let tempM = Math.floor(temp % 3600 / 60);
     let tempS = temp % 3600 % 60;
