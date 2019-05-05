@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .test {
+      padding-top: 100px;
+      text-align: center;
+    }
+    .con {
+      display: inline-block;
+      font-size: 30px;
+    }
+    .con span {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="test">
+    <div class="con"></div>
+  </div>
+</body>
+<script>
+let con = document.getElementsByClassName("con")[0];
+let date = new Date();
+let h = date.getHours();
+let m = date.getMinutes();
+let s = date.getSeconds();
+let begTime = (h*60+m)*60+s;
+
+let time = "18:0:0"
+let endTime = (Number(time.split(":")[0]*60) + Number(time.split(":")[1]))*60 + Number(time.split(":")[2]);
+let temp = endTime - begTime;
+let timer = setInterval(function() {
+  let tempH = Math.floor(temp / 3600);
+  let tempM = Math.floor(temp % 3600 / 60);
+  let tempS = temp % 3600 % 60;
+  con.innerHTML = "距离下班还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
+  temp --;
+  if (temp <= 0) {
+    clearInterval(timer);
+  }
+}, 1000)
+
+
+</script>
+</html>
