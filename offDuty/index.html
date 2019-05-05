@@ -7,45 +7,142 @@
   <title>Document</title>
   <style>
     .test {
-      padding-top: 100px;
+      padding-top: 40px;
       text-align: center;
     }
     .con {
       display: inline-block;
-      font-size: 30px;
+      font-size: 16px;
     }
     .con span {
       color: red;
     }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .clock {
+      padding-top: 100px;
+      text-align: center;
+    }
+    .clockCon {
+      display: inline-block;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 5px solid #000;
+      position: relative;
+      transform: rotate(-90deg);
+    }
+    .clockCon li {
+      display: flex;
+      justify-content: space-between;
+      height:  10px;
+      /* background-color: red; */
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 145px;
+    }
+    .clockCon li span {
+      width: 40px;
+      height: 10px;
+      font-size: 16px;
+      line-height: 10px;
+      position: relative;
+      /* background-color: #000; */
+    }
+    .clockCon li span:after {
+      content: "";
+      width: 15px;
+      height: 10px;
+      position: absolute;
+      background-color: #000;
+    }
+    .clockCon li .left {
+      text-align: right;
+    }
+    .clockCon li .left:after {
+      left: 0;
+    }
+    .clockCon li .right {
+      text-align: left;
+    }
+    .clockCon li .right:after {
+      right: 0;
+    }
+    .hour, .min, .second {
+      position: absolute;
+      left: 148.5px;
+      top: 148.5px;
+      transform-origin: 1.5px;
+    }
+    .hour {
+      width: 60px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 3px;
+    }
+    .min {
+      width: 80px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 3px;
+    }
+    .second {
+      width: 100px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 3px;
+    }
   </style>
 </head>
 <body>
-  <div class="test">
+  <div class="clock">
+    <ul class="clockCon">
+      <div class="hour"></div>
+      <div class="min"></div>
+      <div class="second"></div>
+    </ul>
+  </div>
+   <div class="test">
     <div class="con"></div>
   </div>
 </body>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
 <script>
-let con = document.getElementsByClassName("con")[0];
-let date = new Date();
-let h = date.getHours();
-let m = date.getMinutes();
-let s = date.getSeconds();
-let begTime = (h*60+m)*60+s;
-
-let time = "18:0:0"
-let endTime = (Number(time.split(":")[0]*60) + Number(time.split(":")[1]))*60 + Number(time.split(":")[2]);
-let temp = endTime - begTime;
-let timer = setInterval(function() {
-  let tempH = Math.floor(temp / 3600);
-  let tempM = Math.floor(temp % 3600 / 60);
-  let tempS = temp % 3600 % 60;
-  con.innerHTML = "距离下班还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
-  temp --;
-  if (temp <= 0) {
-    clearInterval(timer);
+  
+  let deg = 0;
+  for (let i = 0; i < 6; i++) {
+    $("<li><span class='left'>"+(6+i)+"</span><span class='right'>"+(i === 0? 12: i)+"</span></li>").css("transform", "rotate("+deg+"deg)").appendTo(".clockCon");
+    deg += 30;
   }
-}, 1000)
+  let con = document.getElementsByClassName("con")[0];
 
+  let date = new Date();
+  let h = date.getHours();
+  let m = date.getMinutes();
+  let s = date.getSeconds();
+  let begTime = (h*60+m)*60+s;
 
+  let offDutyTime = "18:0:0";
+  let endTime = (Number(offDutyTime.split(":")[0]*60) + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
+  let temp = endTime - begTime;
+  let timer = setInterval(function() {
+    let tempH = Math.floor(temp / 3600);
+    let tempM = Math.floor(temp % 3600 / 60);
+    let tempS = temp % 3600 % 60;
+    con.innerHTML = "距离下班还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
+    $(".hour").css("transform", "rotate("+tempH/12*360+"deg)");
+    $(".min").css("transform", "rotate("+tempM/60*360+"deg)");
+    $(".second").css("transform", "rotate("+tempS/60*360+"deg)");
+    temp --;
+    if (temp <= 0) {
+      clearInterval(timer);
+    }
+  }, 1000)
+  
 </script>
 </html>
