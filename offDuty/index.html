@@ -116,6 +116,26 @@
     .con span {
       color: red;
     }
+    .progress {
+      text-align: center;
+    }
+    .progress .progressCon {
+      display: inline-block;
+      width: 300px;
+      height: 10px;
+      border-radius: 5px;
+      background-color: #43c2b5;
+      position: relative;
+    }
+    .progress .progressCon .show {
+      /* width: 100%; */
+      background-color: #e1375d;
+      border-radius: 5px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -140,6 +160,11 @@
       <p>Sec</p>
     </li>
   </ul>
+  <div class="progress">
+    <div class="progressCon">
+      <div class="show"></div>
+    </div>
+  </div>
    <div class="test">
     <div class="con"></div>
   </div>
@@ -162,36 +187,43 @@
 
   let offDutyTime = 18;
   let offDuty = true;
-  let endTime, msg;
+  let endTime, msg, total;
   //endTime = (Number(offDutyTime.split(":")[0])*60 + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
   if (h > 18 || h < 9) {
     offDuty = false;
     msg = "上班";
     endTime = h > 18? (24+9)*3600: 9*3600;
+    total = (24+9-18)*3600;
   } else {
     offDuty = true;
     msg = "下班";
     endTime = offDutyTime*3600;
+    total = (18-9)*3600;
   }
   let temp = endTime - begTime;
   //console.log(endTime, begTime);
   //console.log(temp);
 
-  
-
   let timer = setInterval(function() {
+    temp --;
+    begTime ++;
     let tempH = Math.floor(temp / 3600);
     let tempM = Math.floor(temp % 3600 / 60);
     let tempS = temp % 3600 % 60;
-    $(".showH").text(handle(tempH));
-    $(".showM").text(handle(tempM));
-    $(".showS").text(handle(tempS));
-    con.innerHTML = "距离"+msg+"还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
-    $(".hour").css("transform", "rotate("+tempH/12*360+"deg)");
-    $(".min").css("transform", "rotate("+tempM/60*360+"deg)");
-    $(".second").css("transform", "rotate("+tempS/60*360+"deg)");
-    temp --;
-    if (temp <= 0) {
+    let progress = (1-temp/total)*100 + "%";
+    con.innerHTML = "距离"+msg+"还有<span>" + temp + "</span>秒；计"+handle(tempH)+"小时"+handle(tempM)+"分钟"+handle(tempS)+"秒";
+    $(".progress .progressCon .show").css("width", progress);
+
+    let countH = begTime / 3600;
+    let countM = begTime % 3600 / 60;
+    let countS = begTime % 3600 % 60;
+    $(".hour").css("transform", "rotate("+countH/12*360+"deg)");
+    $(".min").css("transform", "rotate("+countM/60*360+"deg)");
+    $(".second").css("transform", "rotate("+countS/60*360+"deg)");
+    $(".showH").text(handle(Math.floor(countH)));
+    $(".showM").text(handle(Math.floor(countM)));
+    $(".showS").text(handle(countS));
+    if (temp < 0) {
       clearInterval(timer);
     }
   }, 1000)
@@ -199,6 +231,19 @@
   function handle(time) {
     return time >= 10? time: "0"+time;
   }
+
+  /*let arr = [];
+  while (arr.length < 4) {
+    let temp = random();
+    if (!~arr.indexOf(temp)) {
+      arr.push(temp);
+    } 
+  }
+  console.log(arr);
+
+  function random() {
+    return Math.floor(Math.random()*4)
+  }*/
   
 </script>
 </html>
