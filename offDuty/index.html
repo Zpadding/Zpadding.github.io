@@ -6,23 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
-    .test {
-      padding-top: 40px;
-      text-align: center;
-    }
-    .con {
-      display: inline-block;
-      font-size: 16px;
-    }
-    .con span {
-      color: red;
-    }
-
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
+    /* 时钟 */
     .clock {
       padding-top: 100px;
       text-align: center;
@@ -97,6 +86,36 @@
       background-color: #000;
       border-radius: 3px;
     }
+    /* 方块 */
+    .showTime {
+      width: 250px;
+      display: flex;
+      justify-content: space-around;
+      margin: 50px auto 0;
+      text-align: center;
+    }
+    .showTime li p:first-child {
+      width: 50px;
+      height: 50px;
+      color: #fff;
+      font-size: 25px;
+      line-height: 50px;
+      border-radius: 5px;
+      background-color: #000;
+      margin: 0;
+    }
+    /* 文字显示 */
+    .test {
+      padding-top: 20px;
+      text-align: center;
+    }
+    .con {
+      display: inline-block;
+      font-size: 16px;
+    }
+    .con span {
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -107,6 +126,20 @@
       <div class="second"></div>
     </ul>
   </div>
+  <ul class="showTime">
+    <li>
+      <p class="showH"></p>
+      <p>Hrs</p>
+    </li>
+    <li>
+      <p class="showM"></p>
+      <p>Mins</p>
+    </li>
+    <li>
+      <p class="showS"></p>
+      <p>Sec</p>
+    </li>
+  </ul>
    <div class="test">
     <div class="con"></div>
   </div>
@@ -127,15 +160,33 @@
   let s = date.getSeconds();
   let begTime = (h*60+m)*60+s;
 
-  let offDutyTime = "18:0:0";
-  let endTime = (Number(offDutyTime.split(":")[0]*60) + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
+  let offDutyTime = 18;
+  let offDuty = true;
+  let endTime, msg;
+  //endTime = (Number(offDutyTime.split(":")[0])*60 + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
+  if (h > 18 || h < 9) {
+    offDuty = false;
+    msg = "上班";
+    endTime = h > 18? (24+9)*3600: 9*3600;
+  } else {
+    offDuty = true;
+    msg = "下班";
+    endTime = offDutyTime*3600;
+  }
   let temp = endTime - begTime;
+  //console.log(endTime, begTime);
+  //console.log(temp);
+
+  
+
   let timer = setInterval(function() {
-    if (temp < 0) return clearInterval(timer);
     let tempH = Math.floor(temp / 3600);
     let tempM = Math.floor(temp % 3600 / 60);
     let tempS = temp % 3600 % 60;
-    con.innerHTML = "距离下班还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
+    $(".showH").text(handle(tempH));
+    $(".showM").text(handle(tempM));
+    $(".showS").text(handle(tempS));
+    con.innerHTML = "距离"+msg+"还有<span>" + temp + "</span>秒；计"+tempH+"小时"+tempM+"分钟"+tempS+"秒";
     $(".hour").css("transform", "rotate("+tempH/12*360+"deg)");
     $(".min").css("transform", "rotate("+tempM/60*360+"deg)");
     $(".second").css("transform", "rotate("+tempS/60*360+"deg)");
@@ -144,6 +195,10 @@
       clearInterval(timer);
     }
   }, 1000)
+
+  function handle(time) {
+    return time >= 10? time: "0"+time;
+  }
   
 </script>
 </html>
