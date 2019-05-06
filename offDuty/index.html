@@ -8,7 +8,9 @@
   <style>
     body {
       font-family: "STXingkai";
-      background: url("./bg.jpg") no-repeat center;
+      background: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1557742022&di=fa4d66fd1c4cb6dcc8b1320350e15c6a&imgtype=jpg&er=1&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F038ed3b592ce778b5b3086ed45d019d.JPG") no-repeat;
+      /* background-size: cover; */
+      background-position: center;
     }
     ul {
       list-style: none;
@@ -203,10 +205,10 @@
   let offDuty = true;
   let endTime, msg, total;
   //endTime = (Number(offDutyTime.split(":")[0])*60 + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
-  if (h > 18 || h < 9) {
+  if (h >= 18 || h <= 9) {
     offDuty = false;
     msg = "上班";
-    endTime = h > 18? (24+9)*3600: 9*3600;
+    endTime = h >= 18? (24+9)*3600: 9*3600;
     total = (24+9-18)*3600;
   } else {
     offDuty = true;
