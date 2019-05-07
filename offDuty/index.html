@@ -205,7 +205,7 @@
   let offDuty = true;
   let endTime, msg, total;
   //endTime = (Number(offDutyTime.split(":")[0])*60 + Number(offDutyTime.split(":")[1]))*60 + Number(offDutyTime.split(":")[2]);
-  if (h >= 18 || h <= 9) {
+  if (h >= 18 || h < 9) {
     offDuty = false;
     msg = "上班";
     endTime = h >= 18? (24+9)*3600: 9*3600;
