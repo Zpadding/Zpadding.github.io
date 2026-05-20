@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>520 ❤️</title>
+  <style>
+    /* ===== Reset ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: "PingFang SC", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+      -webkit-user-select: none;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fdfcfb 100%);
+      transition: background 1s ease;
+    }
+
+    /* ===== Layout ===== */
+    #app {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* ===== Particles ===== */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      top: 0;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: infinite;
+    }
+    .particle.t0 { animation-name: petal-fall; }
+    .particle.t1 { animation-name: heart-float; }
+    .particle.t2 { animation-name: star-twinkle; }
+    .particle.t3 { animation-name: sakura-fall; }
+    .particle.t4 { animation-name: sparkle-up; }
+
+    /* ===== Particle Keyframes ===== */
+    @keyframes petal-fall {
+      0%   { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(110vh) rotate(720deg) scale(1.2); opacity: 0; }
+    }
+    @keyframes heart-float {
+      0%   { transform: translateY(100vh) scale(0.2) rotate(0deg); opacity: 0; }
+      20%  { opacity: 0.8; transform: translateY(70vh) scale(1); }
+      80%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(0.5) rotate(30deg); opacity: 0; }
+    }
+    @keyframes star-twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+      50% { opacity: 0.9; transform: scale(1.3) rotate(180deg); }
+    }
+    @keyframes sakura-fall {
+      0%   { transform: translateY(-8vh) translateX(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.8; }
+      50%  { transform: translateY(50vh) translateX(40px) rotate(360deg); }
+      100% { transform: translateY(108vh) translateX(-20px) rotate(720deg); opacity: 0; }
+    }
+    @keyframes sparkle-up {
+      0%   { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+      30%  { opacity: 0.8; transform: translateY(60vh) scale(1.4); }
+      70%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(0.3) rotate(360deg); opacity: 0; }
+    }
+
+    /* ===== Scene Container ===== */
+    #scene-wrap {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 24px;
+      width: 100%;
+      max-width: 480px;
+      cursor: pointer;
+      min-height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ===== Individual Scenes ===== */
+    .scene {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+      will-change: transform, opacity;
+      width: 100%;
+    }
+    .scene.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    /* ===== Scene Content ===== */
+    .icon {
+      font-size: 80px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.1));
+      animation: icon-bob 3s ease-in-out infinite;
+    }
+    @keyframes icon-bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-10px); }
+    }
+    .scene[data-scene="1"] .icon {
+      animation: heartbeat 1.4s ease-in-out infinite !important;
+    }
+    .scene[data-scene="4"] .icon {
+      animation: ring-glow 2s ease-in-out infinite !important;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      15%      { transform: scale(1.25); }
+      30%      { transform: scale(1); }
+      45%      { transform: scale(1.15); }
+      60%      { transform: scale(1); }
+    }
+    @keyframes ring-glow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(255,215,0,0.4)); }
+      50%      { filter: drop-shadow(0 0 24px rgba(255,215,0,0.9)); }
+    }
+
+    .title {
+      font-size: 36px;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+      letter-spacing: 4px;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .scene.active .title {
+      animation: fadeInUp 0.8s 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .sub {
+      font-size: 20px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.9);
+      text-shadow: 0 1px 8px rgba(0,0,0,0.1);
+      letter-spacing: 6px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .scene.active .sub {
+      animation: fadeInUp 0.8s 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== Revealed Content ===== */
+    .secret,
+    .heart-rate,
+    .final-message {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all 0.4s ease;
+      pointer-events: none;
+      margin-top: 20px;
+    }
+    .secret.show,
+    .heart-rate.show,
+    .final-message.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .secret {
+      font-size: 16px;
+      color: rgba(255,255,255,0.85);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.08);
+      letter-spacing: 2px;
+      padding: 12px 24px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .heart-rate {
+      display: flex;
+      gap: 8px;
+      font-size: 28px;
+      color: #ff4757;
+      animation: pulse-text 0.6s ease-in-out infinite;
+    }
+    @keyframes pulse-text {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .final-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .big-text {
+      font-size: 48px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ff4757, #ff6b81, #ff4757);
+      background-size: 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 2s linear infinite;
+      letter-spacing: 4px;
+    }
+    @keyframes gradient-shift {
+      0%   { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+    .small-text {
+      font-size: 18px;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 8px;
+    }
+    .confetti-btn {
+      margin-top: 12px;
+      font-size: 36px;
+      cursor: pointer;
+      animation: icon-bob 2s ease-in-out infinite;
+      transition: transform 0.2s;
+      background: none;
+      border: none;
+      outline: none;
+    }
+    .confetti-btn:active {
+      transform: scale(1.3);
+    }
+
+    /* ===== Bottom Bar ===== */
+    #bottom-bar {
+      position: fixed;
+      bottom: 48px;
+      left: 0;
+      right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 2;
+    }
+    #dots {
+      display: flex;
+      gap: 10px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.85);
+    }
+    #hint {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 2px;
+      animation: hint-pulse 2s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.4; }
+      50%      { opacity: 0.9; }
+    }
+
+    /* ===== Confetti ===== */
+    @keyframes confetti-fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 480px) {
+      .title { font-size: 28px; letter-spacing: 3px; }
+      .sub   { font-size: 17px; letter-spacing: 4px; }
+      .icon  { font-size: 64px; }
+      .big-text { font-size: 36px; }
+      .secret { font-size: 14px; padding: 10px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Particles -->
+    <div id="particles"></div>
+
+    <!-- Scenes -->
+    <div id="scene-wrap">
+      <!-- Scene 0: 初遇 -->
+      <div class="scene active" data-scene="0">
+        <div class="icon">🌹</div>
+        <h1 class="title">世间所有相遇</h1>
+        <p class="sub">都是久别重逢</p>
+        <p class="secret">直到遇见你，我才相信这句话</p>
+      </div>
+
+      <!-- Scene 1: 心动 -->
+      <div class="scene" data-scene="1">
+        <div class="icon">💖</div>
+        <h1 class="title">你是我</h1>
+        <p class="sub">心跳的唯一理由</p>
+        <div class="heart-rate"><span>❤</span><span>❤</span><span>❤</span></div>
+      </div>
+
+      <!-- Scene 2: 星河 -->
+      <div class="scene" data-scene="2">
+        <div class="icon">✨</div>
+        <h1 class="title">你是银河</h1>
+        <p class="sub">赠予我的糖</p>
+        <p class="secret">比漫天星辰更耀眼的是你</p>
+      </div>
+
+      <!-- Scene 3: 相伴 -->
+      <div class="scene" data-scene="3">
+        <div class="icon">🌸</div>
+        <h1 class="title">最好的爱</h1>
+        <p class="sub">是长久的陪伴</p>
+        <p class="secret">愿岁岁年年，身边都有你</p>
+      </div>
+
+      <!-- Scene 4: 永恒 -->
+      <div class="scene" data-scene="4">
+        <div class="icon">💍</div>
+        <h1 class="title">往后余生</h1>
+        <p class="sub">全都是你</p>
+        <div class="final-message">
+          <p class="big-text">520 ❤️</p>
+          <p class="small-text">我爱你</p>
+          <button class="confetti-btn" id="confettiBtn">🎊</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div id="bottom-bar">
+      <div id="dots"></div>
+      <p id="hint">轻触屏幕</p>
+    </div>
+  </div>
+
+  <script>
+    // ============================
+    // Data
+    // ============================
+    const TOTAL = 5;
+    let currentScene = 0;
+    let revealed = false;
+
+    const gradients = [
+      "linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fdfcfb 100%)",
+      "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+      "linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)",
+      "linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)",
+      "linear-gradient(135deg, #ffe259 0%, #ffa751 100%)",
+    ];
+
+    // ============================
+    // Particles
+    // ============================
+    var shapes = [
+      { colors: ["#ff6b6b", "#ee5a24", "#ff9ff3", "#f368e0"] },
+      { colors: ["#ff4757", "#ff6b81", "#f368e0", "#ff7f50"] },
+      { colors: ["#ffd700", "#fff200", "#ffec8b", "#ffe066"] },
+      { colors: ["#ffb7c5", "#ff9eb5", "#f8a5c2", "#f78fb3"] },
+      { colors: ["#ffd700", "#ffec8b", "#fffacd", "#ffe259"] },
+    ];
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    var allParticles = [];
+    for (var s = 0; s < TOTAL; s++) {
+      var colors = shapes[s].colors;
+      for (var i = 0; i < 24; i++) {
+        var isHeart = s === 1;
+        allParticles.push({
+          scene: s,
+          css: "left:" + rand(0, 100) + "%;" +
+               "width:" + rand(8, 24) + "px;" +
+               "height:" + rand(8, 24) + "px;" +
+               "background:" + colors[Math.floor(Math.random() * colors.length)] + ";" +
+               "animation-duration:" + rand(4, 10) + "s;" +
+               "animation-delay:" + rand(0, 8) + "s;" +
+               "opacity:" + rand(0.2, 0.6) + ";" +
+               "border-radius:" + (isHeart ? "50% 50% 0 50%" : "50%") + ";"
+        });
+      }
+    }
+
+    function renderParticles(sceneIndex) {
+      var container = document.getElementById("particles");
+      container.innerHTML = "";
+      for (var i = 0; i < allParticles.length; i++) {
+        var p = allParticles[i];
+        if (p.scene !== sceneIndex) continue;
+        var el = document.createElement("div");
+        el.className = "particle t" + sceneIndex;
+        el.style.cssText = p.css;
+        container.appendChild(el);
+      }
+    }
+
+    // ============================
+    // Dots
+    // ============================
+    function renderDots(index) {
+      var container = document.getElementById("dots");
+      container.innerHTML = "";
+      for (var i = 0; i < TOTAL; i++) {
+        var dot = document.createElement("span");
+        dot.className = "dot" + (i === index ? " active" : "");
+        dot.setAttribute("data-index", i);
+        dot.addEventListener("click", function (e) {
+          e.stopPropagation();
+          goTo(parseInt(this.getAttribute("data-index")));
+        });
+        container.appendChild(dot);
+      }
+    }
+
+    // ============================
+    // Scene Management
+    // ============================
+    var revealingEls = {
+      0: ".secret",
+      1: ".heart-rate",
+      2: ".secret",
+      3: ".secret",
+      4: ".final-message"
+    };
+
+    function showScene(index) {
+      // Deactivate all
+      var all = document.querySelectorAll(".scene");
+      for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
+
+      // Activate target
+      var target = document.querySelector('.scene[data-scene="' + index + '"]');
+      if (target) {
+        target.classList.add("active");
+        // Re-trigger CSS animations by reflow
+        target.style.animation = "none";
+        void target.offsetWidth;
+        target.style.animation = "";
+      }
+
+      // Background
+      document.body.style.background = gradients[index];
+
+      // Particles
+      renderParticles(index);
+
+      // Dots
+      renderDots(index);
+
+      // Reset
+      revealed = false;
+      document.querySelectorAll(".secret, .heart-rate, .final-message").forEach(function (el) {
+        el.classList.remove("show");
+      });
+      document.getElementById("hint").textContent = "轻触屏幕";
+    }
+
+    function goTo(index) {
+      if (index < 0 || index >= TOTAL) return;
+      currentScene = index;
+      showScene(currentScene);
+    }
+
+    // ============================
+    // Click Handler
+    // ============================
+    document.getElementById("scene-wrap").addEventListener("click", function () {
+      if (!revealed) {
+        revealed = true;
+        // Show reveal element for current scene
+        var scene = document.querySelector('.scene[data-scene="' + currentScene + '"]');
+        if (scene) {
+          var sel = revealingEls[currentScene];
+          var el = scene.querySelector(sel);
+          if (el) el.classList.add("show");
+        }
+        document.getElementById("hint").textContent = "继续 →";
+      } else if (currentScene < TOTAL - 1) {
+        currentScene++;
+        showScene(currentScene);
+      } else {
+        // Final scene — confetti
+        triggerConfetti();
+      }
+    });
+
+    // ============================
+    // Confetti
+    // ============================
+    function triggerConfetti() {
+      var emojis = ["🎉", "💖", "✨", "🌟", "🎊", "❤️"];
+      for (var i = 0; i < 40; i++) {
+        var c = document.createElement("div");
+        c.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        c.style.cssText =
+          "position:fixed;left:" + rand(0, 100) + "vw;top:-30px;" +
+          "font-size:" + rand(16, 40) + "px;pointer-events:none;z-index:999;" +
+          "animation:confetti-fall " + rand(2, 5) + "s ease-out forwards;" +
+          "animation-delay:" + rand(0, 0.6) + "s;";
+        document.body.appendChild(c);
+        setTimeout(function () { c.remove(); }, 6000);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Handle confetti button
+      var confettiBtn = document.getElementById("confettiBtn");
+      if (confettiBtn) {
+        confettiBtn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          triggerConfetti();
+        });
+      }
+
+      // Init
+      showScene(0);
+    });
+  </script>
+</body>
+</html>
