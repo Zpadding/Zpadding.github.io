@@ -104,7 +104,7 @@ function triggerConfetti() {
     const el = document.createElement('div')
     el.textContent = emojis[Math.floor(Math.random() * emojis.length)]
     el.style.cssText =
-      `position:fixed;left:${rand(0, 100)}vw;top:-30px;font-size:${rand(16, 40)}px;pointer-events:none;z-index:999;animation:confetti-fall ${rand(2, 5)}s ease-out forwards;animation-delay:${rand(0, 0.6)}s;`
+      `position:fixed;left:${rand(0, 100)}vw;top:-30px;font-size:${rand(16, 40)}px;pointer-events:none;z-index:999;animation:lv-confetti-fall ${rand(2, 5)}s ease-out forwards;animation-delay:${rand(0, 0.6)}s;`
     body.appendChild(el)
     setTimeout(() => el.remove(), 6000)
   }
@@ -204,44 +204,11 @@ onMounted(() => {
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
-.particle.t0 { animation-name: petal-fall; }
-.particle.t1 { animation-name: heart-float; }
-.particle.t2 { animation-name: star-twinkle; }
-.particle.t3 { animation-name: sakura-fall; }
-.particle.t4 { animation-name: sparkle-up; }
-
-@keyframes petal-fall {
-  0%   { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 0.6; }
-  100% { transform: translateY(110vh) rotate(720deg) scale(1.2); opacity: 0; }
-}
-@keyframes heart-float {
-  0%   { transform: translateY(100vh) scale(0.2) rotate(0deg); opacity: 0; }
-  20%  { opacity: 0.8; transform: translateY(70vh) scale(1); }
-  80%  { opacity: 0.6; }
-  100% { transform: translateY(-10vh) scale(0.5) rotate(30deg); opacity: 0; }
-}
-@keyframes star-twinkle {
-  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
-  50% { opacity: 0.9; transform: scale(1.3) rotate(180deg); }
-}
-@keyframes sakura-fall {
-  0%   { transform: translateY(-8vh) translateX(0) rotate(0deg); opacity: 0; }
-  10%  { opacity: 0.8; }
-  50%  { transform: translateY(50vh) translateX(40px) rotate(360deg); }
-  100% { transform: translateY(108vh) translateX(-20px) rotate(720deg); opacity: 0; }
-}
-@keyframes sparkle-up {
-  0%   { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
-  30%  { opacity: 0.8; transform: translateY(60vh) scale(1.4); }
-  70%  { opacity: 0.6; }
-  100% { transform: translateY(-10vh) scale(0.3) rotate(360deg); opacity: 0; }
-}
-@keyframes confetti-fall {
-  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
+.particle.t0 { animation-name: lv-petal-fall; }
+.particle.t1 { animation-name: lv-heart-float; }
+.particle.t2 { animation-name: lv-star-twinkle; }
+.particle.t3 { animation-name: lv-sakura-fall; }
+.particle.t4 { animation-name: lv-sparkle-up; }
 
 /* ===== Scene ===== */
 #scene-wrap {
@@ -464,5 +431,41 @@ onMounted(() => {
   .icon  { font-size: 64px; }
   .big-text { font-size: 36px; }
   .secret { font-size: 14px; padding: 10px 18px; }
+}
+</style>
+
+<!-- keyframes 放在非 scoped 块中，避免构建时被 hash 导致动画名不匹配 -->
+<style>
+@keyframes lv-petal-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg) scale(0.8); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) rotate(720deg) scale(1.2); opacity: 0; }
+}
+@keyframes lv-heart-float {
+  0%   { transform: translateY(100vh) scale(0.2) rotate(0deg); opacity: 0; }
+  20%  { opacity: 0.8; transform: translateY(70vh) scale(1); }
+  80%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(0.5) rotate(30deg); opacity: 0; }
+}
+@keyframes lv-star-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+  50% { opacity: 0.9; transform: scale(1.3) rotate(180deg); }
+}
+@keyframes lv-sakura-fall {
+  0%   { transform: translateY(-8vh) translateX(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.8; }
+  50%  { transform: translateY(50vh) translateX(40px) rotate(360deg); }
+  100% { transform: translateY(108vh) translateX(-20px) rotate(720deg); opacity: 0; }
+}
+@keyframes lv-sparkle-up {
+  0%   { transform: translateY(100vh) scale(0) rotate(0deg); opacity: 0; }
+  30%  { opacity: 0.8; transform: translateY(60vh) scale(1.4); }
+  70%  { opacity: 0.6; }
+  100% { transform: translateY(-10vh) scale(0.3) rotate(360deg); opacity: 0; }
+}
+@keyframes lv-confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 </style>
