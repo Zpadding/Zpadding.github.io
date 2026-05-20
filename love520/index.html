@@ -29,6 +29,7 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      cursor: pointer;
     }
 
     /* ===== Particles ===== */
@@ -511,7 +512,7 @@
     // ============================
     // Click Handler
     // ============================
-    document.getElementById("scene-wrap").addEventListener("click", function () {
+    document.getElementById("app").addEventListener("click", function () {
       if (!revealed) {
         revealed = true;
         // Show reveal element for current scene
@@ -521,7 +522,12 @@
           var el = scene.querySelector(sel);
           if (el) el.classList.add("show");
         }
-        document.getElementById("hint").textContent = "继续 →";
+        // Different hint for last scene vs intermediate
+        if (currentScene === TOTAL - 1) {
+          document.getElementById("hint").textContent = "❤️ 520";
+        } else {
+          document.getElementById("hint").textContent = "继续 →";
+        }
       } else if (currentScene < TOTAL - 1) {
         currentScene++;
         showScene(currentScene);
